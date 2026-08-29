@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Badminton Draw Predictor</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         HOME PAGE
+    ========================== -->
+
+    <main id="homePage" class="page">
+
+        <div class="home-container">
+
+            <div class="logo">
+                🏸
+            </div>
+
+            <h1>Badminton Draw Predictor</h1>
+
+            <p class="subtitle">
+                Create, predict and share badminton tournament draws.
+            </p>
+
+            <div class="home-card">
+
+                <h2>Create Tournament</h2>
+
+                <label for="tournamentName">
+                    Tournament Name
+                </label>
+
+                <input
+                    id="tournamentName"
+                    type="text"
+                    placeholder="e.g. 2026 BWF World Championships"
+                >
+
+                <label>
+                    Draw Size
+                </label>
+
+                <div class="draw-size-options">
+
+                    <button
+                        class="size-button active"
+                        data-size="64"
+                    >
+                        R64
+                        <span>64 players</span>
+                    </button>
+
+                    <button
+                        class="size-button"
+                        data-size="32"
+                    >
+                        R32
+                        <span>32 players</span>
+                    </button>
+
+                </div>
+
+                <button
+                    id="createTournamentButton"
+                    class="primary-button"
+                >
+                    Create Draw
+                </button>
+
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <button
+                id="importButton"
+                class="secondary-button"
+            >
+                Open Shared Draw
+            </button>
+
+            <input
+                type="file"
+                id="importFile"
+                accept=".json"
+                hidden
+            >
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         DRAW PAGE
+    ========================== -->
+
+    <main id="drawPage" class="page hidden">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    id="backButton"
+                    class="icon-button"
+                    title="Back"
+                >
+                    ←
+                </button>
+
+                <div>
+                    <div
+                        id="drawTournamentName"
+                        class="tournament-title"
+                    >
+                        Tournament
+                    </div>
+
+                    <div
+                        id="drawSizeLabel"
+                        class="tournament-subtitle"
+                    >
+                        R64
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button
+                    id="resetButton"
+                    class="small-button"
+                >
+                    Reset
+                </button>
+
+                <button
+                    id="shareTemplateButton"
+                    class="small-button"
+                >
+                    Share Template
+                </button>
+
+                <button
+                    id="sharePredictionButton"
+                    class="primary-small-button"
+                >
+                    Share Prediction
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             PREDICTOR
+        ========================== -->
+
+        <section class="predictor-bar">
+
+            <div>
+
+                <label for="predictorName">
+                    Predictor Name
+                </label>
+
+                <input
+                    id="predictorName"
+                    type="text"
+                    placeholder="Enter your name"
+                >
+
+            </div>
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                <span id="saveStatus">
+                    Saved locally
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             DRAW
+        ========================== -->
+
+        <section class="draw-wrapper">
+
+            <div
+                id="drawContainer"
+                class="draw-container"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CHAMPION
+        ========================== -->
+
+        <section
+            id="championSection"
+            class="champion-section hidden"
+        >
+
+            <div class="champion-label">
+                🏆 Champion
+            </div>
+
+            <div
+                id="championDisplay"
+                class="champion-display"
+            >
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         COUNTRY MODAL
+    ========================== -->
+
+    <div
+        id="countryModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-background"></div>
+
+        <div class="country-modal">
+
+            <div class="modal-header">
+
+                <h2>Select Country</h2>
+
+                <button
+                    id="closeCountryModal"
+                    class="close-button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <input
+                id="countrySearch"
+                type="text"
+                class="country-search"
+                placeholder="Search country..."
+                autocomplete="off"
+            >
+
+            <div
+                id="countryList"
+                class="country-list"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SHARE MODAL
+    ========================== -->
+
+    <div
+        id="shareModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-background"></div>
+
+        <div class="share-modal">
+
+            <div class="modal-header">
+
+                <h2 id="shareModalTitle">
+                    Share Draw
+                </h2>
+
+                <button
+                    id="closeShareModal"
+                    class="close-button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <p id="shareModalDescription">
+                Copy this link and send it to someone.
+            </p>
+
+            <div class="share-link-container">
+
+                <input
+                    id="shareLink"
+                    readonly
+                >
+
+                <button
+                    id="copyShareLink"
+                    class="primary-button"
+                >
+                    Copy
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script src="countries.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
