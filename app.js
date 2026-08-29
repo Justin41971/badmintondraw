@@ -1,11 +1,10 @@
+
 /* =========================================================
    BADMINTON DRAW PREDICTOR
    ========================================================= */
 
 let tournament = null;
-
 let selectedDrawSize = 64;
-
 let currentCountrySlot = null;
 
 
@@ -63,7 +62,7 @@ const championDisplay =
 
 
 /* =========================================================
-   DRAW SIZE SELECTION
+   DRAW SIZE
    ========================================================= */
 
 document.querySelectorAll(".size-button").forEach(button => {
@@ -72,7 +71,9 @@ document.querySelectorAll(".size-button").forEach(button => {
 
         document
             .querySelectorAll(".size-button")
-            .forEach(btn => btn.classList.remove("active"));
+            .forEach(btn => {
+                btn.classList.remove("active");
+            });
 
         button.classList.add("active");
 
@@ -145,7 +146,7 @@ function createTournament(name, size) {
 
 
 /* =========================================================
-   SHOW DRAW
+   SHOW DRAW PAGE
    ========================================================= */
 
 function showDrawPage() {
@@ -187,6 +188,7 @@ function renderDraw() {
         roundColumn.className =
             "round-column";
 
+
         const roundTitle =
             document.createElement("div");
 
@@ -202,6 +204,7 @@ function renderDraw() {
         const matchCount =
             roundSize / 2;
 
+
         for (
             let matchIndex = 0;
             matchIndex < matchCount;
@@ -211,17 +214,20 @@ function renderDraw() {
             const match =
                 createMatch(
                     roundIndex,
-                    matchIndex,
-                    roundSize
+                    matchIndex
                 );
 
             roundColumn.appendChild(match);
 
         }
 
-        drawContainer.appendChild(roundColumn);
+
+        drawContainer.appendChild(
+            roundColumn
+        );
 
     });
+
 
     updateChampion();
 
@@ -253,17 +259,23 @@ function getRounds(size) {
 
 function getRoundName(size) {
 
-    if (size === 64) return "Round of 64";
+    if (size === 64)
+        return "Round of 64";
 
-    if (size === 32) return "Round of 32";
+    if (size === 32)
+        return "Round of 32";
 
-    if (size === 16) return "Round of 16";
+    if (size === 16)
+        return "Round of 16";
 
-    if (size === 8) return "Quarterfinals";
+    if (size === 8)
+        return "Quarterfinals";
 
-    if (size === 4) return "Semifinals";
+    if (size === 4)
+        return "Semifinals";
 
-    if (size === 2) return "Final";
+    if (size === 2)
+        return "Final";
 
     return "";
 
@@ -276,8 +288,7 @@ function getRoundName(size) {
 
 function createMatch(
     roundIndex,
-    matchIndex,
-    roundSize
+    matchIndex
 ) {
 
     const match =
@@ -286,12 +297,14 @@ function createMatch(
     match.className =
         "match";
 
+
     const player1 =
         getPlayerForSlot(
             roundIndex,
             matchIndex,
             0
         );
+
 
     const player2 =
         getPlayerForSlot(
@@ -301,26 +314,25 @@ function createMatch(
         );
 
 
-    const playerCard1 =
+    match.appendChild(
         createPlayerCard(
             player1,
             roundIndex,
             matchIndex,
             0
-        );
+        )
+    );
 
-    const playerCard2 =
+
+    match.appendChild(
         createPlayerCard(
             player2,
             roundIndex,
             matchIndex,
             1
-        );
+        )
+    );
 
-
-    match.appendChild(playerCard1);
-
-    match.appendChild(playerCard2);
 
     return match;
 
@@ -328,7 +340,7 @@ function createMatch(
 
 
 /* =========================================================
-   GET PLAYER FOR A SLOT
+   GET PLAYER FOR SLOT
    ========================================================= */
 
 function getPlayerForSlot(
@@ -338,17 +350,20 @@ function getPlayerForSlot(
 ) {
 
     /*
-        ROUND 1
+        FIRST ROUND
 
-        Directly uses tournament.players
+        Players come directly from
+        tournament.players.
     */
 
     if (roundIndex === 0) {
 
-        const index =
+        const playerIndex =
             matchIndex * 2 + position;
 
-        return tournament.players[index];
+        return tournament.players[
+            playerIndex
+        ];
 
     }
 
@@ -356,30 +371,36 @@ function getPlayerForSlot(
     /*
         LATER ROUNDS
 
-        Winner comes from previous round.
+        Each player comes from the
+        winner of a previous match.
     */
 
     const previousMatchIndex =
         matchIndex * 2 + position;
 
-    const previousWinner =
-        tournament.winners[
-            `${roundIndex - 1}-${previousMatchIndex}`
-        ];
 
-    if (!previousWinner) {
+    const winnerKey =
+        `${roundIndex - 1}-${previousMatchIndex}`;
+
+
+    const winner =
+        tournament.winners[winnerKey];
+
+
+    if (!winner) {
 
         return null;
 
     }
 
-    return previousWinner;
+
+    return winner;
 
 }
 
 
 /* =========================================================
-   PLAYER CARD
+   CREATE PLAYER CARD
    ========================================================= */
 
 function createPlayerCard(
@@ -396,15 +417,25 @@ function createPlayerCard(
         "player-card";
 
 
-    /*
-        FIRST ROUND
-        Allows editing player information.
-    */
+    /* =====================================================
+       FIRST ROUND
+       ===================================================== */
 
     if (roundIndex === 0) {
 
+        const playerIndex =
+            matchIndex * 2 + position;
+
+
+        /* -------------------------------------------------
+           FLAG BUTTON
+           ------------------------------------------------- */
+
         const flagButton =
             document.createElement("button");
+
+        flagButton.type =
+            "button";
 
         flagButton.className =
             "flag-button";
@@ -415,69 +446,133 @@ function createPlayerCard(
         flagButton.title =
             "Select country";
 
+
         flagButton.addEventListener(
             "click",
-            event => {
+            function(event) {
 
                 event.stopPropagation();
 
                 openCountrySelector(
-                    matchIndex * 2 + position
+                    playerIndex
                 );
 
             }
         );
 
 
+        /* -------------------------------------------------
+           NAME INPUT
+           ------------------------------------------------- */
+
         const input =
             document.createElement("input");
 
-        input.type = "text";
+        input.type =
+            "text";
 
         input.className =
             "player-name-input";
 
         input.placeholder =
-            `Player ${matchIndex * 2 + position + 1}`;
+            `Player ${playerIndex + 1}`;
 
         input.value =
             player?.name || "";
 
 
+        /*
+            Prevent the input from triggering
+            the card's winner click.
+        */
+
         input.addEventListener(
-            "input",
-            () => {
+            "click",
+            function(event) {
 
-                tournament.players[
-                    matchIndex * 2 + position
-                ].name = input.value;
-
-                saveTournament();
-
-                updateLaterRounds();
+                event.stopPropagation();
 
             }
         );
 
 
-        card.appendChild(flagButton);
+        input.addEventListener(
+            "mousedown",
+            function(event) {
 
-        card.appendChild(input);
+                event.stopPropagation();
+
+            }
+        );
+
+
+        /*
+            Save the name WITHOUT rebuilding
+            the entire draw.
+        */
+
+        input.addEventListener(
+            "input",
+            function() {
+
+                tournament.players[
+                    playerIndex
+                ].name = input.value;
+
+                saveTournament();
+
+            }
+        );
+
+
+        /*
+            Once the user leaves the input,
+            update the later rounds.
+
+            This prevents the cursor from
+            disappearing after every letter.
+        */
+
+        input.addEventListener(
+            "blur",
+            function() {
+
+                renderDraw();
+
+            }
+        );
+
+
+        card.appendChild(
+            flagButton
+        );
+
+        card.appendChild(
+            input
+        );
 
     }
 
-    else {
 
-        /*
-            LATER ROUND PLAYER
-        */
+    /* =====================================================
+       LATER ROUNDS
+       ===================================================== */
+
+    else {
 
         if (!player) {
 
-            card.classList.add("empty-player");
+            card.classList.add(
+                "empty-player"
+            );
 
-            card.innerHTML =
-                `<span>Winner of previous match</span>`;
+            const text =
+                document.createElement("span");
+
+            text.textContent =
+                "Winner of previous match";
+
+            card.appendChild(text);
 
         }
 
@@ -512,21 +607,20 @@ function createPlayerCard(
     }
 
 
-    /*
-        CLICK TO SELECT WINNER
-    */
+    /* =====================================================
+       SELECT WINNER
+       ===================================================== */
 
     if (player && player.name) {
 
         card.addEventListener(
             "click",
-            () => {
+            function() {
 
                 selectWinner(
                     roundIndex,
                     matchIndex,
-                    player,
-                    card
+                    player
                 );
 
             }
@@ -535,15 +629,17 @@ function createPlayerCard(
     }
 
 
-    /*
-        Highlight selected winner
-    */
+    /* =====================================================
+       WINNER HIGHLIGHT
+       ===================================================== */
 
     const winnerKey =
         `${roundIndex}-${matchIndex}`;
 
+
     const winner =
         tournament.winners[winnerKey];
+
 
     if (
         winner &&
@@ -551,7 +647,9 @@ function createPlayerCard(
         winner.name === player.name
     ) {
 
-        card.classList.add("winner");
+        card.classList.add(
+            "winner"
+        );
 
     }
 
@@ -568,16 +666,16 @@ function createPlayerCard(
 function selectWinner(
     roundIndex,
     matchIndex,
-    player,
-    card
+    player
 ) {
 
     const key =
         `${roundIndex}-${matchIndex}`;
 
+
     /*
-        If clicking the same player,
-        deselect them.
+        Clicking the selected player again
+        removes the prediction.
     */
 
     if (
@@ -592,22 +690,29 @@ function selectWinner(
     else {
 
         tournament.winners[key] = {
+
             name: player.name,
+
             country: player.country
-                ? { ...player.country }
+                ? {
+                    ...player.country
+                }
                 : null
+
         };
 
     }
 
 
     /*
-        Remove predictions from all
-        later rounds because changing
-        an earlier result can invalidate them.
+        Changing a winner invalidates
+        predictions in later rounds.
     */
 
-    clearLaterPredictions(roundIndex);
+    clearLaterPredictions(
+        roundIndex
+    );
+
 
     saveTournament();
 
@@ -620,32 +725,28 @@ function selectWinner(
    CLEAR LATER PREDICTIONS
    ========================================================= */
 
-function clearLaterPredictions(roundIndex) {
+function clearLaterPredictions(
+    roundIndex
+) {
 
-    Object.keys(tournament.winners)
-        .forEach(key => {
+    Object.keys(
+        tournament.winners
+    ).forEach(key => {
 
-            const [round] =
-                key.split("-").map(Number);
+        const parts =
+            key.split("-");
 
-            if (round > roundIndex) {
-
-                delete tournament.winners[key];
-
-            }
-
-        });
-
-}
+        const round =
+            Number(parts[0]);
 
 
-/* =========================================================
-   UPDATE LATER ROUNDS
-   ========================================================= */
+        if (round > roundIndex) {
 
-function updateLaterRounds() {
+            delete tournament.winners[key];
 
-    renderDraw();
+        }
+
+    });
 
 }
 
@@ -654,7 +755,9 @@ function updateLaterRounds() {
    COUNTRY SELECTOR
    ========================================================= */
 
-function openCountrySelector(slotIndex) {
+function openCountrySelector(
+    slotIndex
+) {
 
     currentCountrySlot =
         slotIndex;
@@ -663,9 +766,11 @@ function openCountrySelector(slotIndex) {
         "hidden"
     );
 
-    countrySearch.value = "";
+    countrySearch.value =
+        "";
 
     renderCountries();
+
 
     setTimeout(() => {
 
@@ -682,7 +787,8 @@ function closeCountrySelector() {
         "hidden"
     );
 
-    currentCountrySlot = null;
+    currentCountrySlot =
+        null;
 
 }
 
@@ -709,6 +815,10 @@ countrySearch.addEventListener(
 );
 
 
+/* =========================================================
+   RENDER COUNTRIES
+   ========================================================= */
+
 function renderCountries() {
 
     const search =
@@ -716,7 +826,10 @@ function renderCountries() {
             .trim()
             .toLowerCase();
 
-    countryList.innerHTML = "";
+
+    countryList.innerHTML =
+        "";
+
 
     const filtered =
         countries.filter(country =>
@@ -731,34 +844,58 @@ function renderCountries() {
         const button =
             document.createElement("button");
 
+        button.type =
+            "button";
+
         button.className =
             "country-option";
 
-        button.innerHTML = `
-            <span class="country-flag">
-                ${country.flag}
-            </span>
 
-            <span>
-                ${country.name}
-            </span>
-        `;
+        const flag =
+            document.createElement("span");
+
+        flag.className =
+            "country-flag";
+
+        flag.textContent =
+            country.flag;
+
+
+        const name =
+            document.createElement("span");
+
+        name.textContent =
+            country.name;
+
+
+        button.appendChild(flag);
+
+        button.appendChild(name);
 
 
         button.addEventListener(
             "click",
-            () => {
+            function() {
 
                 if (
                     currentCountrySlot === null
-                ) return;
+                ) {
+
+                    return;
+
+                }
+
 
                 tournament.players[
                     currentCountrySlot
                 ].country = {
+
                     code: country.code,
+
                     name: country.name,
+
                     flag: country.flag
+
                 };
 
 
@@ -772,7 +909,9 @@ function renderCountries() {
         );
 
 
-        countryList.appendChild(button);
+        countryList.appendChild(
+            button
+        );
 
     });
 
@@ -785,7 +924,9 @@ function renderCountries() {
 
 predictorNameInput.addEventListener(
     "input",
-    () => {
+    function() {
+
+        if (!tournament) return;
 
         tournament.predictorName =
             predictorNameInput.value;
@@ -804,13 +945,18 @@ function saveTournament() {
 
     if (!tournament) return;
 
+
     localStorage.setItem(
         "badmintonTournament",
         JSON.stringify(tournament)
     );
 
+
     const saveStatus =
-        document.getElementById("saveStatus");
+        document.getElementById(
+            "saveStatus"
+        );
+
 
     if (saveStatus) {
 
@@ -833,7 +979,13 @@ function loadLocalTournament() {
             "badmintonTournament"
         );
 
-    if (!saved) return false;
+
+    if (!saved) {
+
+        return false;
+
+    }
+
 
     try {
 
@@ -859,7 +1011,7 @@ function loadLocalTournament() {
 
 
 /* =========================================================
-   SHARE SYSTEM
+   SHARE ENCODING
    ========================================================= */
 
 function encodeTournament(data) {
@@ -867,22 +1019,34 @@ function encodeTournament(data) {
     const json =
         JSON.stringify(data);
 
+
     const encoded =
         btoa(
             encodeURIComponent(json)
                 .replace(
                     /%([0-9A-F]{2})/g,
-                    (_, p1) =>
-                        String.fromCharCode(
-                            parseInt(p1, 16)
-                        )
+                    function(_, p1) {
+
+                        return String.fromCharCode(
+                            parseInt(
+                                p1,
+                                16
+                            )
+                        );
+
+                    }
                 )
         );
+
 
     return encoded;
 
 }
 
+
+/* =========================================================
+   SHARE DECODING
+   ========================================================= */
 
 function decodeTournament(encoded) {
 
@@ -893,16 +1057,21 @@ function decodeTournament(encoded) {
                 Array.prototype.map
                     .call(
                         atob(encoded),
-                        char =>
-                            "%" +
-                            ("00" +
-                                char
-                                    .charCodeAt(0)
-                                    .toString(16))
-                                .slice(-2)
+                        function(char) {
+
+                            return "%" +
+                                (
+                                    "00" +
+                                    char
+                                        .charCodeAt(0)
+                                        .toString(16)
+                                ).slice(-2);
+
+                        }
                     )
                     .join("")
             );
+
 
         return JSON.parse(json);
 
@@ -934,9 +1103,12 @@ function generateShareLink(
         ...tournament
     };
 
+
     /*
-        Do not share local-only data
-        in a template.
+        Template:
+
+        Keep player names and countries,
+        but remove predictions and predictor.
     */
 
     if (!completedPrediction) {
@@ -951,8 +1123,10 @@ function generateShareLink(
     const encoded =
         encodeTournament(data);
 
+
     const url =
         `${window.location.origin}${window.location.pathname}?draw=${encoded}`;
+
 
     return url;
 
@@ -964,13 +1138,16 @@ function generateShareLink(
    ========================================================= */
 
 document
-    .getElementById("shareTemplateButton")
+    .getElementById(
+        "shareTemplateButton"
+    )
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             const url =
                 generateShareLink(false);
+
 
             openShareModal(
                 "Share Tournament Template",
@@ -987,13 +1164,16 @@ document
    ========================================================= */
 
 document
-    .getElementById("sharePredictionButton")
+    .getElementById(
+        "sharePredictionButton"
+    )
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             const url =
                 generateShareLink(true);
+
 
             openShareModal(
                 "Share Completed Prediction",
@@ -1005,6 +1185,10 @@ document
     );
 
 
+/* =========================================================
+   OPEN SHARE MODAL
+   ========================================================= */
+
 function openShareModal(
     title,
     description,
@@ -1014,11 +1198,14 @@ function openShareModal(
     shareModalTitle.textContent =
         title;
 
+
     shareModalDescription.textContent =
         description;
 
+
     shareLink.value =
         url;
+
 
     shareModal.classList.remove(
         "hidden"
@@ -1032,10 +1219,12 @@ function openShareModal(
    ========================================================= */
 
 document
-    .getElementById("closeShareModal")
+    .getElementById(
+        "closeShareModal"
+    )
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             shareModal.classList.add(
                 "hidden"
@@ -1049,7 +1238,7 @@ shareModal
     .querySelector(".modal-background")
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             shareModal.classList.add(
                 "hidden"
@@ -1064,10 +1253,12 @@ shareModal
    ========================================================= */
 
 document
-    .getElementById("copyShareLink")
+    .getElementById(
+        "copyShareLink"
+    )
     .addEventListener(
         "click",
-        async () => {
+        async function() {
 
             try {
 
@@ -1075,19 +1266,21 @@ document
                     shareLink.value
                 );
 
-                document
-                    .getElementById(
+
+                const button =
+                    document.getElementById(
                         "copyShareLink"
-                    )
-                    .textContent = "Copied!";
+                    );
+
+
+                button.textContent =
+                    "Copied!";
+
 
                 setTimeout(() => {
 
-                    document
-                        .getElementById(
-                            "copyShareLink"
-                        )
-                        .textContent = "Copy";
+                    button.textContent =
+                        "Copy";
 
                 }, 1500);
 
@@ -1108,7 +1301,7 @@ document
 
 
 /* =========================================================
-   IMPORT SHARED DRAW FROM URL
+   LOAD DRAW FROM URL
    ========================================================= */
 
 function loadFromURL() {
@@ -1118,13 +1311,21 @@ function loadFromURL() {
             window.location.search
         );
 
+
     const encoded =
         params.get("draw");
 
-    if (!encoded) return false;
+
+    if (!encoded) {
+
+        return false;
+
+    }
+
 
     const decoded =
         decodeTournament(encoded);
+
 
     if (!decoded) {
 
@@ -1136,12 +1337,15 @@ function loadFromURL() {
 
     }
 
+
     tournament =
         decoded;
+
 
     saveTournament();
 
     showDrawPage();
+
 
     return true;
 
@@ -1153,10 +1357,12 @@ function loadFromURL() {
    ========================================================= */
 
 document
-    .getElementById("backButton")
+    .getElementById(
+        "backButton"
+    )
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             drawPage.classList.add(
                 "hidden"
@@ -1175,23 +1381,35 @@ document
    ========================================================= */
 
 document
-    .getElementById("resetButton")
+    .getElementById(
+        "resetButton"
+    )
     .addEventListener(
         "click",
-        () => {
+        function() {
 
             const confirmed =
                 confirm(
                     "Reset this tournament? All predictions will be deleted."
                 );
 
-            if (!confirmed) return;
 
-            tournament.winners = {};
+            if (!confirmed) {
 
-            tournament.predictorName = "";
+                return;
 
-            predictorNameInput.value = "";
+            }
+
+
+            tournament.winners =
+                {};
+
+            tournament.predictorName =
+                "";
+
+            predictorNameInput.value =
+                "";
+
 
             saveTournament();
 
@@ -1207,13 +1425,25 @@ document
 
 function updateChampion() {
 
+    const rounds =
+        getRounds(
+            tournament.size
+        );
+
+
     const finalRound =
-        getRounds(tournament.size).length - 1;
+        rounds.length - 1;
+
 
     const champion =
         tournament.winners[
             `${finalRound}-0`
         ];
+
+
+    /*
+        No final winner yet.
+    */
 
     if (!champion) {
 
@@ -1225,36 +1455,45 @@ function updateChampion() {
 
     }
 
+
+    /*
+        Final winner exists.
+        Show champion.
+    */
+
     championSection.classList.remove(
         "hidden"
     );
 
-    championDisplay.innerHTML = `
-        <span class="champion-flag">
-            ${champion.country?.flag || "🌐"}
-        </span>
 
-        <span>
-            ${escapeHTML(champion.name)}
-        </span>
-    `;
-
-}
+    championDisplay.innerHTML =
+        "";
 
 
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
+    const flag =
+        document.createElement("span");
 
-function escapeHTML(text) {
+    flag.className =
+        "champion-flag";
 
-    const div =
-        document.createElement("div");
+    flag.textContent =
+        champion.country?.flag || "🌐";
 
-    div.textContent =
-        text;
 
-    return div.innerHTML;
+    const name =
+        document.createElement("span");
+
+    name.textContent =
+        champion.name;
+
+
+    championDisplay.appendChild(
+        flag
+    );
+
+    championDisplay.appendChild(
+        name
+    );
 
 }
 
@@ -1279,6 +1518,7 @@ function initialize() {
 
     }
 
+
     if (loadLocalTournament()) {
 
         showDrawPage();
@@ -1291,3 +1531,4 @@ function initialize() {
 
 
 initialize();
+
