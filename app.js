@@ -61,49 +61,122 @@ const championDisplay =
 
 
 /* =========================================================
+   FLAG HELPER
+   ========================================================= */
+
+/*
+    Converts a two-letter country code into an emoji flag.
+
+    Example:
+    CA -> 🇨🇦
+    CN -> 🇨🇳
+    JP -> 🇯🇵
+    KR -> 🇰🇷
+*/
+
+function getFlagEmoji(countryCode) {
+
+    if (!countryCode) {
+        return "🌐";
+    }
+
+    const code =
+        countryCode
+            .toUpperCase()
+            .trim();
+
+    if (code.length !== 2) {
+        return "🌐";
+    }
+
+    return [...code]
+        .map(
+            char =>
+                String.fromCodePoint(
+                    127397 + char.charCodeAt(0)
+                )
+        )
+        .join("");
+
+}
+
+
+/*
+    Gets the flag from a player.
+
+    We use the country CODE rather than
+    relying on the saved emoji.
+*/
+
+function getPlayerFlag(player) {
+
+    if (!player || !player.country) {
+        return "🌐";
+    }
+
+    return getFlagEmoji(
+        player.country.code
+    );
+
+}
+
+
+/* =========================================================
    DRAW SIZE SELECTION
    ========================================================= */
 
-document.querySelectorAll(".size-button").forEach(button => {
+document
+    .querySelectorAll(".size-button")
+    .forEach(button => {
 
-    button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-        document
-            .querySelectorAll(".size-button")
-            .forEach(btn => btn.classList.remove("active"));
+                document
+                    .querySelectorAll(".size-button")
+                    .forEach(btn =>
+                        btn.classList.remove("active")
+                    );
 
-        button.classList.add("active");
+                button.classList.add("active");
 
-        selectedDrawSize =
-            Number(button.dataset.size);
+                selectedDrawSize =
+                    Number(button.dataset.size);
+
+            }
+        );
 
     });
-
-});
 
 
 /* =========================================================
    CREATE TOURNAMENT
    ========================================================= */
 
-createTournamentButton.addEventListener("click", () => {
+createTournamentButton.addEventListener(
+    "click",
+    () => {
 
-    const name =
-        tournamentNameInput.value.trim();
+        const name =
+            tournamentNameInput.value.trim();
 
-    if (!name) {
+        if (!name) {
 
-        alert("Please enter a tournament name.");
+            alert(
+                "Please enter a tournament name."
+            );
 
-        return;
+            return;
+        }
+
+        createTournament(
+            name,
+            selectedDrawSize
+        );
+
     }
-
-    createTournament(
-        name,
-        selectedDrawSize
-    );
-
-});
+);
 
 
 function createTournament(name, size) {
@@ -113,15 +186,18 @@ function createTournament(name, size) {
     for (let i = 0; i < size; i++) {
 
         players.push({
+
             name: "",
+
             country: null
+
         });
 
     }
 
     tournament = {
 
-        version: 1,
+        version: 2,
 
         tournamentName: name,
 
@@ -177,49 +253,59 @@ function renderDraw() {
     const rounds =
         getRounds(tournament.size);
 
-    rounds.forEach((roundSize, roundIndex) => {
+    rounds.forEach(
+        (roundSize, roundIndex) => {
 
-        const roundColumn =
-            document.createElement("div");
+            const roundColumn =
+                document.createElement("div");
 
-        roundColumn.className =
-            "round-column";
+            roundColumn.className =
+                "round-column";
 
-        const roundTitle =
-            document.createElement("div");
+            const roundTitle =
+                document.createElement("div");
 
-        roundTitle.className =
-            "round-title";
+            roundTitle.className =
+                "round-title";
 
-        roundTitle.textContent =
-            getRoundName(roundSize);
+            roundTitle.textContent =
+                getRoundName(roundSize);
 
-        roundColumn.appendChild(roundTitle);
+            roundColumn.appendChild(
+                roundTitle
+            );
 
 
-        const matchCount =
-            roundSize / 2;
+            const matchCount =
+                roundSize / 2;
 
-        for (
-            let matchIndex = 0;
-            matchIndex < matchCount;
-            matchIndex++
-        ) {
 
-            const match =
-                createMatch(
-                    roundIndex,
-                    matchIndex,
-                    roundSize
+            for (
+                let matchIndex = 0;
+                matchIndex < matchCount;
+                matchIndex++
+            ) {
+
+                const match =
+                    createMatch(
+                        roundIndex,
+                        matchIndex,
+                        roundSize
+                    );
+
+                roundColumn.appendChild(
+                    match
                 );
 
-            roundColumn.appendChild(match);
+            }
+
+
+            drawContainer.appendChild(
+                roundColumn
+            );
 
         }
-
-        drawContainer.appendChild(roundColumn);
-
-    });
+    );
 
     updateChampion();
 
@@ -251,17 +337,23 @@ function getRounds(size) {
 
 function getRoundName(size) {
 
-    if (size === 64) return "Round of 64";
+    if (size === 64)
+        return "Round of 64";
 
-    if (size === 32) return "Round of 32";
+    if (size === 32)
+        return "Round of 32";
 
-    if (size === 16) return "Round of 16";
+    if (size === 16)
+        return "Round of 16";
 
-    if (size === 8) return "Quarterfinals";
+    if (size === 8)
+        return "Quarterfinals";
 
-    if (size === 4) return "Semifinals";
+    if (size === 4)
+        return "Semifinals";
 
-    if (size === 2) return "Final";
+    if (size === 2)
+        return "Final";
 
     return "";
 
@@ -283,6 +375,7 @@ function createMatch(
 
     match.className =
         "match";
+
 
     const player1 =
         getPlayerForSlot(
@@ -316,9 +409,14 @@ function createMatch(
         );
 
 
-    match.appendChild(playerCard1);
+    match.appendChild(
+        playerCard1
+    );
 
-    match.appendChild(playerCard2);
+    match.appendChild(
+        playerCard2
+    );
+
 
     return match;
 
@@ -326,7 +424,7 @@ function createMatch(
 
 
 /* =========================================================
-   GET PLAYER FOR A SLOT
+   GET PLAYER FOR SLOT
    ========================================================= */
 
 function getPlayerForSlot(
@@ -355,8 +453,8 @@ function getPlayerForSlot(
     /*
         LATER ROUNDS
 
-        Get the winner from the
-        appropriate previous-round match.
+        The player is whoever won
+        the corresponding previous-round match.
     */
 
     const previousMatchIndex =
@@ -367,19 +465,13 @@ function getPlayerForSlot(
             `${roundIndex - 1}-${previousMatchIndex}`
         ];
 
+
     if (!previousWinner) {
 
         return null;
 
     }
 
-    /*
-        The winner object already contains
-        both the name AND country.
-
-        This is what makes the flag carry
-        through every round.
-    */
 
     return previousWinner;
 
@@ -404,27 +496,30 @@ function createPlayerCard(
         "player-card";
 
 
-    /*
-        FIRST ROUND
-        Allows editing player information.
-    */
+    /* =====================================================
+       ROUND 1
+       ===================================================== */
 
     if (roundIndex === 0) {
 
         const flagButton =
             document.createElement("button");
 
-        flagButton.type = "button";
+        flagButton.type =
+            "button";
 
         flagButton.className =
             "flag-button";
 
         /*
-            Display the actual country emoji.
+            IMPORTANT:
+
+            Generate the emoji from
+            the country CODE.
         */
 
         flagButton.textContent =
-            player?.country?.flag || "🌐";
+            getPlayerFlag(player);
 
         flagButton.title =
             "Select country";
@@ -433,6 +528,8 @@ function createPlayerCard(
         flagButton.addEventListener(
             "click",
             event => {
+
+                event.preventDefault();
 
                 event.stopPropagation();
 
@@ -444,38 +541,66 @@ function createPlayerCard(
         );
 
 
+        /* =================================================
+           NAME INPUT
+           ================================================= */
+
         const input =
             document.createElement("input");
 
-        input.type = "text";
+        input.type =
+            "text";
 
         input.className =
             "player-name-input";
 
         input.placeholder =
-            `Player ${matchIndex * 2 + position + 1}`;
+            `Player ${
+                matchIndex * 2 +
+                position +
+                1
+            }`;
 
         input.value =
             player?.name || "";
 
 
         /*
-            IMPORTANT:
-
-            Do NOT re-render the entire draw
-            while the user is typing.
-
-            This prevents the input from losing
-            focus after every letter.
+            STOP THE PLAYER CARD CLICK
+            FROM FIRING WHEN TYPING.
         */
+
+        input.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        input.addEventListener(
+            "mousedown",
+            event => {
+
+                event.stopPropagation();
+
+            }
+        );
+
 
         input.addEventListener(
             "input",
             () => {
 
+                const playerIndex =
+                    matchIndex * 2 + position;
+
                 tournament.players[
-                    matchIndex * 2 + position
-                ].name = input.value;
+                    playerIndex
+                ].name =
+                    input.value;
 
                 saveTournament();
 
@@ -483,24 +608,38 @@ function createPlayerCard(
         );
 
 
-        card.appendChild(flagButton);
+        card.appendChild(
+            flagButton
+        );
 
-        card.appendChild(input);
+        card.appendChild(
+            input
+        );
 
     }
 
-    else {
 
-        /*
-            LATER ROUND PLAYER
-        */
+    /* =====================================================
+       LATER ROUNDS
+       ===================================================== */
+
+    else {
 
         if (!player) {
 
-            card.classList.add("empty-player");
+            card.classList.add(
+                "empty-player"
+            );
 
-            card.innerHTML =
-                `<span>Winner of previous match</span>`;
+            const text =
+                document.createElement("span");
+
+            text.textContent =
+                "Winner of previous match";
+
+            card.appendChild(
+                text
+            );
 
         }
 
@@ -509,8 +648,8 @@ function createPlayerCard(
             /*
                 FLAG
 
-                Use textContent so the country
-                emoji is rendered as an emoji.
+                The country is automatically
+                carried forward.
             */
 
             const flag =
@@ -520,11 +659,11 @@ function createPlayerCard(
                 "player-flag";
 
             flag.textContent =
-                player.country?.flag || "🌐";
+                getPlayerFlag(player);
 
 
             /*
-                NAME
+                PLAYER NAME
             */
 
             const name =
@@ -534,26 +673,31 @@ function createPlayerCard(
                 "player-name";
 
             name.textContent =
-                player.name || "Unnamed Player";
+                player.name ||
+                "Unnamed Player";
 
 
-            card.appendChild(flag);
+            card.appendChild(
+                flag
+            );
 
-            card.appendChild(name);
+            card.appendChild(
+                name
+            );
 
         }
 
     }
 
 
-    /*
-        CLICK TO SELECT WINNER
+    /* =====================================================
+       SELECT WINNER
+       ===================================================== */
 
-        Only allow selecting players who
-        actually have a name.
-    */
-
-    if (player && player.name) {
+    if (
+        player &&
+        player.name
+    ) {
 
         card.addEventListener(
             "click",
@@ -571,15 +715,18 @@ function createPlayerCard(
     }
 
 
-    /*
-        Highlight selected winner.
-    */
+    /* =====================================================
+       WINNER HIGHLIGHT
+       ===================================================== */
 
     const winnerKey =
         `${roundIndex}-${matchIndex}`;
 
     const winner =
-        tournament.winners[winnerKey];
+        tournament.winners[
+            winnerKey
+        ];
+
 
     if (
         winner &&
@@ -587,7 +734,9 @@ function createPlayerCard(
         winner.name === player.name
     ) {
 
-        card.classList.add("winner");
+        card.classList.add(
+            "winner"
+        );
 
     }
 
@@ -612,13 +761,14 @@ function selectWinner(
 
 
     /*
-        If clicking the same player,
-        deselect them.
+        Clicking the selected winner
+        again deselects them.
     */
 
     if (
         tournament.winners[key] &&
-        tournament.winners[key].name === player.name
+        tournament.winners[key].name ===
+            player.name
     ) {
 
         delete tournament.winners[key];
@@ -628,11 +778,10 @@ function selectWinner(
     else {
 
         /*
-            Store a copy of the player.
+            SAVE THE ENTIRE PLAYER OBJECT.
 
-            This includes the country object,
-            which means the flag follows the
-            player into future rounds.
+            This means the country code
+            travels with the player.
         */
 
         tournament.winners[key] = {
@@ -641,9 +790,16 @@ function selectWinner(
 
             country: player.country
                 ? {
-                    code: player.country.code,
-                    name: player.country.name,
-                    flag: player.country.flag
+                    code:
+                        player.country.code,
+
+                    name:
+                        player.country.name,
+
+                    flag:
+                        getFlagEmoji(
+                            player.country.code
+                        )
                 }
                 : null
 
@@ -653,12 +809,14 @@ function selectWinner(
 
 
     /*
-        Remove predictions from later rounds
-        because changing an earlier result
-        can invalidate them.
+        Any later predictions are now
+        invalid and must be removed.
     */
 
-    clearLaterPredictions(roundIndex);
+    clearLaterPredictions(
+        roundIndex
+    );
+
 
     saveTournament();
 
@@ -671,21 +829,28 @@ function selectWinner(
    CLEAR LATER PREDICTIONS
    ========================================================= */
 
-function clearLaterPredictions(roundIndex) {
+function clearLaterPredictions(
+    roundIndex
+) {
 
-    Object.keys(tournament.winners)
-        .forEach(key => {
+    Object.keys(
+        tournament.winners
+    ).forEach(key => {
 
-            const [round] =
-                key.split("-").map(Number);
+        const [round] =
+            key
+                .split("-")
+                .map(Number);
 
-            if (round > roundIndex) {
+        if (
+            round > roundIndex
+        ) {
 
-                delete tournament.winners[key];
+            delete tournament.winners[key];
 
-            }
+        }
 
-        });
+    });
 
 }
 
@@ -694,7 +859,9 @@ function clearLaterPredictions(roundIndex) {
    COUNTRY SELECTOR
    ========================================================= */
 
-function openCountrySelector(slotIndex) {
+function openCountrySelector(
+    slotIndex
+) {
 
     currentCountrySlot =
         slotIndex;
@@ -703,15 +870,20 @@ function openCountrySelector(slotIndex) {
         "hidden"
     );
 
-    countrySearch.value = "";
+    countrySearch.value =
+        "";
 
     renderCountries();
 
-    setTimeout(() => {
 
-        countrySearch.focus();
+    setTimeout(
+        () => {
 
-    }, 50);
+            countrySearch.focus();
+
+        },
+        50
+    );
 
 }
 
@@ -722,13 +894,16 @@ function closeCountrySelector() {
         "hidden"
     );
 
-    currentCountrySlot = null;
+    currentCountrySlot =
+        null;
 
 }
 
 
 document
-    .getElementById("closeCountryModal")
+    .getElementById(
+        "closeCountryModal"
+    )
     .addEventListener(
         "click",
         closeCountrySelector
@@ -736,7 +911,9 @@ document
 
 
 countryModal
-    .querySelector(".modal-background")
+    .querySelector(
+        ".modal-background"
+    )
     .addEventListener(
         "click",
         closeCountrySelector
@@ -760,97 +937,135 @@ function renderCountries() {
             .trim()
             .toLowerCase();
 
-    countryList.innerHTML = "";
+
+    countryList.innerHTML =
+        "";
 
 
     const filtered =
-        countries.filter(country =>
-            country.name
-                .toLowerCase()
-                .includes(search)
+        countries.filter(
+            country =>
+                country.name
+                    .toLowerCase()
+                    .includes(search)
         );
 
 
-    filtered.forEach(country => {
+    filtered.forEach(
+        country => {
 
-        const button =
-            document.createElement("button");
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        button.type = "button";
+            button.type =
+                "button";
 
-        button.className =
-            "country-option";
-
-
-        /*
-            FLAG EMOJI
-        */
-
-        const flag =
-            document.createElement("span");
-
-        flag.className =
-            "country-flag";
-
-        flag.textContent =
-            country.flag;
+            button.className =
+                "country-option";
 
 
-        /*
-            COUNTRY NAME
-        */
+            /*
+                CREATE FLAG SEPARATELY
 
-        const name =
-            document.createElement("span");
+                This avoids any issue with
+                the flag text stored in countries.js.
+            */
 
-        name.textContent =
-            country.name;
+            const flag =
+                document.createElement(
+                    "span"
+                );
 
+            flag.className =
+                "country-flag";
 
-        button.appendChild(flag);
-
-        button.appendChild(name);
-
-
-        /*
-            SELECT COUNTRY
-        */
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    currentCountrySlot === null
-                ) return;
+            flag.textContent =
+                getFlagEmoji(
+                    country.code
+                );
 
 
-                tournament.players[
-                    currentCountrySlot
-                ].country = {
+            const name =
+                document.createElement(
+                    "span"
+                );
 
-                    code: country.code,
-
-                    name: country.name,
-
-                    flag: country.flag
-
-                };
+            name.textContent =
+                country.name;
 
 
-                saveTournament();
+            button.appendChild(
+                flag
+            );
 
-                closeCountrySelector();
-
-                renderDraw();
-
-            }
-        );
+            button.appendChild(
+                name
+            );
 
 
-        countryList.appendChild(button);
+            button.addEventListener(
+                "click",
+                event => {
 
-    });
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+
+                    if (
+                        currentCountrySlot ===
+                        null
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                        Store BOTH the country
+                        information and code.
+
+                        The code is what we use
+                        to generate the emoji.
+                    */
+
+                    tournament.players[
+                        currentCountrySlot
+                    ].country = {
+
+                        code:
+                            country.code,
+
+                        name:
+                            country.name,
+
+                        flag:
+                            getFlagEmoji(
+                                country.code
+                            )
+
+                    };
+
+
+                    saveTournament();
+
+                    closeCountrySelector();
+
+                    renderDraw();
+
+                }
+            );
+
+
+            countryList.appendChild(
+                button
+            );
+
+        }
+    );
 
 }
 
@@ -863,7 +1078,9 @@ predictorNameInput.addEventListener(
     "input",
     () => {
 
-        if (!tournament) return;
+        if (!tournament) {
+            return;
+        }
 
         tournament.predictorName =
             predictorNameInput.value;
@@ -880,7 +1097,10 @@ predictorNameInput.addEventListener(
 
 function saveTournament() {
 
-    if (!tournament) return;
+    if (!tournament) {
+        return;
+    }
+
 
     localStorage.setItem(
         "badmintonTournament",
@@ -889,7 +1109,10 @@ function saveTournament() {
 
 
     const saveStatus =
-        document.getElementById("saveStatus");
+        document.getElementById(
+            "saveStatus"
+        );
+
 
     if (saveStatus) {
 
@@ -912,13 +1135,40 @@ function loadLocalTournament() {
             "badmintonTournament"
         );
 
-    if (!saved) return false;
+
+    if (!saved) {
+        return false;
+    }
 
 
     try {
 
         tournament =
             JSON.parse(saved);
+
+
+        /*
+            Make sure older saved tournaments
+            still work.
+        */
+
+        if (
+            !tournament.winners
+        ) {
+
+            tournament.winners = {};
+
+        }
+
+
+        if (
+            !tournament.players
+        ) {
+
+            tournament.players = [];
+
+        }
+
 
         return true;
 
@@ -947,6 +1197,7 @@ function encodeTournament(data) {
     const json =
         JSON.stringify(data);
 
+
     const encoded =
         btoa(
             encodeURIComponent(json)
@@ -954,17 +1205,23 @@ function encodeTournament(data) {
                     /%([0-9A-F]{2})/g,
                     (_, p1) =>
                         String.fromCharCode(
-                            parseInt(p1, 16)
+                            parseInt(
+                                p1,
+                                16
+                            )
                         )
                 )
         );
+
 
     return encoded;
 
 }
 
 
-function decodeTournament(encoded) {
+function decodeTournament(
+    encoded
+) {
 
     try {
 
@@ -975,16 +1232,21 @@ function decodeTournament(encoded) {
                         atob(encoded),
                         char =>
                             "%" +
-                            ("00" +
+                            (
+                                "00" +
                                 char
                                     .charCodeAt(0)
-                                    .toString(16))
+                                    .toString(16)
+                            )
                                 .slice(-2)
                     )
                     .join("")
             );
 
-        return JSON.parse(json);
+
+        return JSON.parse(
+            json
+        );
 
     }
 
@@ -1016,8 +1278,8 @@ function generateShareLink(
 
 
     /*
-        Do not share local-only data
-        in a template.
+        Templates should not contain
+        predictions or predictor name.
     */
 
     if (!completedPrediction) {
@@ -1030,11 +1292,15 @@ function generateShareLink(
 
 
     const encoded =
-        encodeTournament(data);
+        encodeTournament(
+            data
+        );
 
 
     const url =
-        `${window.location.origin}${window.location.pathname}?draw=${encoded}`;
+        `${window.location.origin}` +
+        `${window.location.pathname}` +
+        `?draw=${encoded}`;
 
 
     return url;
@@ -1047,17 +1313,24 @@ function generateShareLink(
    ========================================================= */
 
 document
-    .getElementById("shareTemplateButton")
+    .getElementById(
+        "shareTemplateButton"
+    )
     .addEventListener(
         "click",
         () => {
 
             const url =
-                generateShareLink(false);
+                generateShareLink(
+                    false
+                );
+
 
             openShareModal(
                 "Share Tournament Template",
+
                 "Send this link to someone. They can enter their name and complete the draw.",
+
                 url
             );
 
@@ -1070,17 +1343,24 @@ document
    ========================================================= */
 
 document
-    .getElementById("sharePredictionButton")
+    .getElementById(
+        "sharePredictionButton"
+    )
     .addEventListener(
         "click",
         () => {
 
             const url =
-                generateShareLink(true);
+                generateShareLink(
+                    true
+                );
+
 
             openShareModal(
                 "Share Completed Prediction",
+
                 "Send this link to share your completed tournament prediction.",
+
                 url
             );
 
@@ -1115,7 +1395,9 @@ function openShareModal(
    ========================================================= */
 
 document
-    .getElementById("closeShareModal")
+    .getElementById(
+        "closeShareModal"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1129,7 +1411,9 @@ document
 
 
 shareModal
-    .querySelector(".modal-background")
+    .querySelector(
+        ".modal-background"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1147,7 +1431,9 @@ shareModal
    ========================================================= */
 
 document
-    .getElementById("copyShareLink")
+    .getElementById(
+        "copyShareLink"
+    )
     .addEventListener(
         "click",
         async () => {
@@ -1159,22 +1445,25 @@ document
                 );
 
 
-                const copyButton =
+                const button =
                     document.getElementById(
                         "copyShareLink"
                     );
 
 
-                copyButton.textContent =
+                button.textContent =
                     "Copied!";
 
 
-                setTimeout(() => {
+                setTimeout(
+                    () => {
 
-                    copyButton.textContent =
-                        "Copy";
+                        button.textContent =
+                            "Copy";
 
-                }, 1500);
+                    },
+                    1500
+                );
 
             }
 
@@ -1203,15 +1492,20 @@ function loadFromURL() {
             window.location.search
         );
 
+
     const encoded =
         params.get("draw");
 
 
-    if (!encoded) return false;
+    if (!encoded) {
+        return false;
+    }
 
 
     const decoded =
-        decodeTournament(encoded);
+        decodeTournament(
+            encoded
+        );
 
 
     if (!decoded) {
@@ -1230,19 +1524,24 @@ function loadFromURL() {
 
 
     /*
-        Make sure older saved tournaments
-        still have the expected structure.
+        Make sure old shared tournaments
+        have the required properties.
     */
 
-    if (!tournament.players) {
+    if (
+        !tournament.winners
+    ) {
 
-        tournament.players = [];
+        tournament.winners = {};
 
     }
 
-    if (!tournament.winners) {
 
-        tournament.winners = {};
+    if (
+        !tournament.players
+    ) {
+
+        tournament.players = [];
 
     }
 
@@ -1261,7 +1560,9 @@ function loadFromURL() {
    ========================================================= */
 
 document
-    .getElementById("backButton")
+    .getElementById(
+        "backButton"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1283,7 +1584,9 @@ document
    ========================================================= */
 
 document
-    .getElementById("resetButton")
+    .getElementById(
+        "resetButton"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1294,14 +1597,20 @@ document
                 );
 
 
-            if (!confirmed) return;
+            if (!confirmed) {
+                return;
+            }
 
 
-            tournament.winners = {};
+            tournament.winners =
+                {};
 
-            tournament.predictorName = "";
+            tournament.predictorName =
+                "";
 
-            predictorNameInput.value = "";
+            predictorNameInput.value =
+                "";
+
 
             saveTournament();
 
@@ -1318,23 +1627,16 @@ document
 function updateChampion() {
 
     const finalRound =
-        getRounds(tournament.size).length - 1;
+        getRounds(
+            tournament.size
+        ).length - 1;
 
-
-    /*
-        The final match is always:
-        `${finalRound}-0`
-    */
 
     const champion =
         tournament.winners[
             `${finalRound}-0`
         ];
 
-
-    /*
-        No champion yet.
-    */
 
     if (!champion) {
 
@@ -1347,16 +1649,13 @@ function updateChampion() {
     }
 
 
-    /*
-        Champion exists.
-    */
-
     championSection.classList.remove(
         "hidden"
     );
 
 
-    championDisplay.innerHTML = "";
+    championDisplay.innerHTML =
+        "";
 
 
     /*
@@ -1364,13 +1663,17 @@ function updateChampion() {
     */
 
     const flag =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
     flag.className =
         "champion-flag";
 
     flag.textContent =
-        champion.country?.flag || "🌐";
+        getPlayerFlag(
+            champion
+        );
 
 
     /*
@@ -1378,15 +1681,21 @@ function updateChampion() {
     */
 
     const name =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
     name.textContent =
         champion.name;
 
 
-    championDisplay.appendChild(flag);
+    championDisplay.appendChild(
+        flag
+    );
 
-    championDisplay.appendChild(name);
+    championDisplay.appendChild(
+        name
+    );
 
 }
 
@@ -1405,15 +1714,18 @@ function initialize() {
         3. Home page
     */
 
-
-    if (loadFromURL()) {
+    if (
+        loadFromURL()
+    ) {
 
         return;
 
     }
 
 
-    if (loadLocalTournament()) {
+    if (
+        loadLocalTournament()
+    ) {
 
         showDrawPage();
 
