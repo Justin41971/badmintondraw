@@ -1,60 +1,59 @@
 
 /* =========================================================
-   BADMINTON DRAWS
-   Visual style:
-   warm, editorial, understated, sporting
+   BADMINTON DRAW BUILDER
+   Simple / editorial / tournament-style
    ========================================================= */
 
 
 /* =========================================================
-   COLOURS
+   VARIABLES
    ========================================================= */
 
 :root {
-    --paper: #f3f0e8;
-    --paper-dark: #e8e4d9;
+    --background: #f7f6f1;
+    --surface: #ffffff;
 
-    --surface: #faf9f5;
-    --surface-hover: #f1efe8;
+    --text: #292b27;
+    --muted: #74766e;
 
-    --sage: #71816d;
-    --sage-dark: #566653;
-    --sage-light: #e2e8df;
+    --green: #536653;
+    --green-dark: #405241;
+    --green-light: #e7ece5;
 
-    --ink: #252823;
-    --muted: #747970;
+    --red: #874b50;
 
-    --line: #d8d5cb;
-    --line-dark: #c5c2b8;
+    --border: #c9c8c0;
+    --border-light: #deddd6;
 
-    --white: #ffffff;
+    --hover: #f0efe9;
 }
 
 
 /* =========================================================
-   GLOBAL
+   RESET
    ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
+html {
     min-height: 100%;
 }
 
 body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    background: var(--background);
+
+    color: var(--text);
+
     font-family:
-        "DM Sans",
+        "Source Sans 3",
         Arial,
         sans-serif;
-
-    background: var(--paper);
-
-    color: var(--ink);
 }
 
 button,
@@ -72,7 +71,7 @@ button {
 
 
 /* =========================================================
-   HOME PAGE
+   HOME
    ========================================================= */
 
 .page {
@@ -80,72 +79,37 @@ button {
 }
 
 .home-container {
-    width: min(600px, 92%);
+    width: 500px;
+
+    max-width: calc(100% - 36px);
 
     margin: 0 auto;
 
-    padding-top: 90px;
-
-    text-align: center;
+    padding-top: 120px;
 }
 
 
 /* =========================================================
-   WORDMARK
-   ========================================================= */
-
-.wordmark {
-    display: inline-block;
-
-    margin-bottom: 28px;
-
-    padding-bottom: 8px;
-
-    border-bottom: 1px solid var(--sage);
-
-    color: var(--sage-dark);
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 2.2px;
-}
-
-
-/* =========================================================
-   HOME HEADING
+   TITLE
    ========================================================= */
 
 .home-container h1 {
-    margin: 0;
+    margin: 0 0 36px;
 
     font-family:
-        "Libre Baskerville",
+        "Source Serif 4",
         Georgia,
         serif;
 
-    font-size: 40px;
+    font-size: 38px;
 
-    line-height: 1.25;
+    font-weight: 500;
 
-    font-weight: 400;
+    letter-spacing: -0.7px;
 
-    letter-spacing: -0.8px;
-}
+    line-height: 1.2;
 
-.subtitle {
-    width: 480px;
-
-    max-width: 100%;
-
-    margin: 16px auto 38px;
-
-    color: var(--muted);
-
-    font-size: 15px;
-
-    line-height: 1.7;
+    text-align: center;
 }
 
 
@@ -154,60 +118,56 @@ button {
    ========================================================= */
 
 .home-card {
-    background: var(--surface);
-
-    border: 1px solid var(--line);
-
-    border-radius: 8px;
-
     padding: 30px;
 
-    text-align: left;
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 4px;
 }
 
 .home-card h2 {
-    margin: 0 0 26px;
+    margin: 0 0 28px;
 
     font-family:
-        "Libre Baskerville",
+        "Source Serif 4",
         Georgia,
         serif;
 
-    font-size: 20px;
+    font-size: 21px;
 
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .home-card label {
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    color: var(--ink);
+    font-size: 13px;
 
-    font-size: 12px;
+    font-weight: 600;
 
-    font-weight: 700;
-
-    letter-spacing: 0.4px;
+    color: var(--text);
 }
 
 .home-card input {
     width: 100%;
 
-    height: 46px;
+    height: 44px;
 
     margin-bottom: 23px;
 
-    padding: 0 13px;
+    padding: 0 11px;
 
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
-    background: var(--white);
+    background: white;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-size: 14px;
 
@@ -215,11 +175,11 @@ button {
 }
 
 .home-card input::placeholder {
-    color: #a09f97;
+    color: #aaa9a1;
 }
 
 .home-card input:focus {
-    border-color: var(--sage);
+    border-color: var(--green);
 }
 
 
@@ -230,78 +190,82 @@ button {
 .draw-size-options {
     display: flex;
 
-    gap: 10px;
+    gap: 9px;
 
-    margin-bottom: 22px;
+    margin-bottom: 23px;
 }
 
 .size-button {
     flex: 1;
 
-    padding: 14px;
+    min-height: 58px;
 
-    border: 1px solid var(--line-dark);
+    padding: 10px 13px;
 
-    border-radius: 6px;
+    border: 1px solid var(--border);
+
+    border-radius: 3px;
 
     background: var(--surface);
 
-    color: var(--ink);
-
-    font-size: 15px;
-
-    font-weight: 600;
+    color: var(--text);
 
     text-align: left;
 
     transition:
-        background 0.15s ease,
-        border-color 0.15s ease;
+        background 0.12s ease,
+        border-color 0.12s ease;
+}
+
+.size-button:hover {
+    background: var(--hover);
+}
+
+.size-button strong {
+    display: block;
+
+    font-size: 15px;
+
+    font-weight: 600;
 }
 
 .size-button span {
     display: block;
 
-    margin-top: 4px;
+    margin-top: 2px;
 
     color: var(--muted);
 
-    font-size: 11px;
-
-    font-weight: 400;
-}
-
-.size-button:hover {
-    background: var(--surface-hover);
+    font-size: 12px;
 }
 
 .size-button.active {
-    border-color: var(--sage-dark);
+    border-color: var(--green);
 
-    background: var(--sage-light);
+    background: var(--green-light);
 
-    color: var(--sage-dark);
+    color: var(--green-dark);
 }
 
 .size-button.active span {
-    color: var(--sage-dark);
+    color: var(--green-dark);
 }
 
 
 /* =========================================================
-   BUTTONS
+   MAIN BUTTON
    ========================================================= */
 
 .primary-button {
     width: 100%;
 
-    height: 46px;
+    height: 44px;
 
-    border: 0;
+    border: 1px solid var(--green-dark);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
-    background: var(--sage-dark);
+    background: var(--green);
 
     color: white;
 
@@ -309,39 +273,40 @@ button {
 
     font-weight: 600;
 
-    transition: background 0.15s ease;
+    transition: background 0.12s ease;
 }
 
 .primary-button:hover {
-    background: #475646;
+    background: var(--green-dark);
 }
+
+
+/* =========================================================
+   SECONDARY BUTTON
+   ========================================================= */
 
 .secondary-button {
     width: 100%;
 
-    height: 46px;
+    height: 44px;
 
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
     background: transparent;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-size: 14px;
 
     font-weight: 600;
 
-    transition:
-        background 0.15s ease,
-        border-color 0.15s ease;
+    transition: background 0.12s ease;
 }
 
 .secondary-button:hover {
     background: var(--surface);
-
-    border-color: var(--sage);
 }
 
 
@@ -354,13 +319,13 @@ button {
 
     align-items: center;
 
-    gap: 14px;
+    gap: 12px;
 
-    margin: 25px 0;
+    margin: 24px 0;
 
-    color: #9b9b93;
+    color: var(--muted);
 
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .divider::before,
@@ -369,14 +334,14 @@ button {
 
     height: 1px;
 
-    background: var(--line);
-
     flex: 1;
+
+    background: var(--border-light);
 }
 
 
 /* =========================================================
-   TOP BAR
+   DRAW TOP BAR
    ========================================================= */
 
 .topbar {
@@ -386,7 +351,9 @@ button {
 
     z-index: 20;
 
-    height: 70px;
+    min-height: 68px;
+
+    padding: 0 24px;
 
     display: flex;
 
@@ -394,11 +361,9 @@ button {
 
     justify-content: space-between;
 
-    padding: 0 28px;
-
     background: var(--surface);
 
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--border);
 }
 
 .topbar-left {
@@ -406,61 +371,73 @@ button {
 
     align-items: center;
 
-    gap: 13px;
+    gap: 12px;
 }
 
-.icon-button {
-    width: 36px;
+.back-button {
+    width: 34px;
 
-    height: 36px;
+    height: 34px;
 
-    border: 1px solid var(--line-dark);
+    padding: 0;
 
-    border-radius: 5px;
+    border: 1px solid var(--border);
 
-    background: transparent;
+    border-radius: 3px;
 
-    color: var(--ink);
+    background: white;
+
+    color: var(--text);
 
     font-size: 19px;
+
+    line-height: 1;
 }
 
-.icon-button:hover {
-    background: var(--paper-dark);
+.back-button:hover {
+    background: var(--hover);
 }
 
 .tournament-title {
     font-family:
-        "Libre Baskerville",
+        "Source Serif 4",
         Georgia,
         serif;
 
-    font-size: 15px;
+    font-size: 17px;
 
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .tournament-subtitle {
-    margin-top: 3px;
+    margin-top: 1px;
 
     color: var(--muted);
 
     font-size: 11px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
 }
 
 .topbar-actions {
     display: flex;
+
+    align-items: center;
 
     gap: 7px;
 }
 
 .small-button,
 .primary-small-button {
-    height: 36px;
+    height: 34px;
 
-    padding: 0 13px;
+    padding: 0 12px;
 
-    border-radius: 5px;
+    border-radius: 3px;
 
     font-size: 12px;
 
@@ -468,27 +445,27 @@ button {
 }
 
 .small-button {
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    background: transparent;
+    background: white;
 
-    color: var(--ink);
+    color: var(--text);
 }
 
 .small-button:hover {
-    background: var(--paper-dark);
+    background: var(--hover);
 }
 
 .primary-small-button {
-    border: 1px solid var(--sage-dark);
+    border: 1px solid var(--green-dark);
 
-    background: var(--sage-dark);
+    background: var(--green);
 
     color: white;
 }
 
 .primary-small-button:hover {
-    background: #475646;
+    background: var(--green-dark);
 }
 
 
@@ -497,9 +474,9 @@ button {
    ========================================================= */
 
 .predictor-bar {
-    min-height: 74px;
+    min-height: 72px;
 
-    padding: 14px 28px;
+    padding: 12px 24px;
 
     display: flex;
 
@@ -507,52 +484,52 @@ button {
 
     justify-content: space-between;
 
-    background: var(--paper);
+    border-bottom: 1px solid var(--border-light);
 
-    border-bottom: 1px solid var(--line);
+    background: var(--background);
 }
 
-.predictor-bar label {
+.predictor-name label {
     display: block;
 
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 
     color: var(--muted);
 
-    font-size: 10px;
+    font-size: 11px;
 
-    font-weight: 700;
-
-    letter-spacing: 1px;
+    font-weight: 600;
 
     text-transform: uppercase;
+
+    letter-spacing: 0.7px;
 }
 
-.predictor-bar input {
-    width: 250px;
+.predictor-name input {
+    width: 230px;
 
-    height: 35px;
+    height: 34px;
 
-    padding: 0 10px;
+    padding: 0 9px;
 
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
-    background: var(--surface);
+    background: white;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-size: 13px;
 
     outline: none;
 }
 
-.predictor-bar input:focus {
-    border-color: var(--sage);
+.predictor-name input:focus {
+    border-color: var(--green);
 }
 
-.status {
+.save-status {
     display: flex;
 
     align-items: center;
@@ -571,18 +548,20 @@ button {
 
     border-radius: 50%;
 
-    background: var(--sage);
+    background: var(--green);
 }
 
 
 /* =========================================================
-   DRAW
+   DRAW AREA
    ========================================================= */
 
 .draw-wrapper {
+    width: 100%;
+
     overflow-x: auto;
 
-    padding: 40px;
+    padding: 38px 32px 60px;
 }
 
 .draw-container {
@@ -590,7 +569,7 @@ button {
 
     align-items: stretch;
 
-    gap: 25px;
+    gap: 28px;
 
     width: max-content;
 
@@ -599,11 +578,11 @@ button {
 
 
 /* =========================================================
-   ROUND
+   ROUND COLUMNS
    ========================================================= */
 
 .round-column {
-    width: 220px;
+    width: 218px;
 
     display: flex;
 
@@ -611,7 +590,7 @@ button {
 }
 
 .round-title {
-    height: 40px;
+    height: 36px;
 
     display: flex;
 
@@ -619,38 +598,45 @@ button {
 
     justify-content: center;
 
+    border-bottom: 1px solid var(--border);
+
     color: var(--muted);
 
-    font-size: 10px;
+    font-size: 11px;
 
     font-weight: 700;
 
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
 
     text-transform: uppercase;
 }
 
 
 /* =========================================================
-   MATCH
+   MATCHES
    ========================================================= */
 
 .match {
     position: relative;
+
+    flex: 1;
+
+    min-height: 94px;
 
     display: flex;
 
     flex-direction: column;
 
     justify-content: center;
-
-    flex: 1;
-
-    min-height: 100px;
 }
 
+
+/* =========================================================
+   PLAYER
+   ========================================================= */
+
 .player-card {
-    min-height: 42px;
+    min-height: 39px;
 
     display: flex;
 
@@ -658,43 +644,48 @@ button {
 
     gap: 8px;
 
-    padding: 0 10px;
+    padding: 0 9px;
 
-    background: var(--surface);
+    border: 1px solid var(--border);
 
-    border: 1px solid var(--line);
+    background: white;
 
     transition:
-        background 0.15s ease,
-        border-color 0.15s ease;
+        background 0.12s ease,
+        border-color 0.12s ease;
 }
 
 .player-card:first-of-type {
-    border-radius: 5px 5px 0 0;
+    border-radius: 3px 3px 0 0;
 }
 
 .player-card:last-of-type {
-    border-radius: 0 0 5px 5px;
-
     border-top: 0;
+
+    border-radius: 0 0 3px 3px;
 }
 
-.player-card:not(.empty-player):hover {
-    background: var(--surface-hover);
+.player-card:hover {
+    background: #fbfbf8;
 }
 
 .player-card.winner {
-    background: var(--sage-light);
+    background: var(--green-light);
 
-    border-color: var(--sage);
+    border-color: var(--green);
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
-.flag-button {
-    width: 29px;
 
-    height: 29px;
+/* =========================================================
+   FLAGS
+   ========================================================= */
+
+.flag-button {
+    width: 27px;
+
+    height: 27px;
 
     padding: 0;
 
@@ -702,10 +693,27 @@ button {
 
     background: transparent;
 
-    font-size: 19px;
+    font-size: 18px;
+
+    line-height: 1;
 
     flex-shrink: 0;
 }
+
+.player-flag {
+    width: 27px;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   PLAYER NAME
+   ========================================================= */
 
 .player-name-input {
     width: 100%;
@@ -718,7 +726,7 @@ button {
 
     background: transparent;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-size: 12px;
 }
@@ -727,20 +735,14 @@ button {
     color: #aaa9a1;
 }
 
-.player-flag {
-    font-size: 19px;
-
-    flex-shrink: 0;
-}
-
 .player-name {
-    overflow: hidden;
+    min-width: 0;
 
-    text-overflow: ellipsis;
+    overflow: hidden;
 
     white-space: nowrap;
 
-    color: var(--ink);
+    text-overflow: ellipsis;
 
     font-size: 12px;
 }
@@ -748,14 +750,14 @@ button {
 .empty-player {
     color: #aaa9a1;
 
-    font-size: 10px;
+    font-size: 11px;
 
     font-style: italic;
 }
 
 
 /* =========================================================
-   DRAW CONNECTIONS
+   BRACKET LINES
    ========================================================= */
 
 .round-column:not(:last-child) .match::after {
@@ -763,13 +765,15 @@ button {
 
     position: absolute;
 
-    right: -25px;
+    top: 50%;
 
-    width: 25px;
+    right: -28px;
+
+    width: 28px;
 
     height: 1px;
 
-    background: var(--line-dark);
+    background: var(--border);
 }
 
 .round-column:not(:first-child) .match::before {
@@ -777,13 +781,15 @@ button {
 
     position: absolute;
 
-    left: -25px;
+    top: 50%;
 
-    width: 25px;
+    left: -28px;
+
+    width: 28px;
 
     height: 1px;
 
-    background: var(--line-dark);
+    background: var(--border);
 }
 
 
@@ -792,63 +798,63 @@ button {
    ========================================================= */
 
 .champion-section {
-    width: min(500px, 90%);
+    width: min(500px, calc(100% - 32px));
 
-    margin: 20px auto 60px;
+    margin: 0 auto 55px;
 
     text-align: center;
 }
 
 .champion-label {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 
     color: var(--muted);
 
-    font-size: 10px;
+    font-size: 11px;
 
     font-weight: 700;
 
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
 
     text-transform: uppercase;
 }
 
 .champion-display {
+    min-height: 56px;
+
     display: flex;
 
     align-items: center;
 
     justify-content: center;
 
-    gap: 12px;
+    gap: 10px;
 
-    padding: 18px;
+    padding: 12px 18px;
 
-    border: 1px solid var(--sage);
+    border: 1px solid var(--green);
 
-    border-radius: 6px;
+    border-radius: 3px;
 
-    background: var(--surface);
+    background: white;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-family:
-        "Libre Baskerville",
+        "Source Serif 4",
         Georgia,
         serif;
 
     font-size: 18px;
-
-    font-weight: 400;
 }
 
 .champion-flag {
     font-family:
-        "DM Sans",
+        "Source Sans 3",
         Arial,
         sans-serif;
 
-    font-size: 27px;
+    font-size: 24px;
 }
 
 
@@ -869,7 +875,7 @@ button {
 
     inset: 0;
 
-    background: rgba(37, 40, 35, 0.42);
+    background: rgba(35, 37, 33, 0.38);
 }
 
 .country-modal,
@@ -882,26 +888,23 @@ button {
 
     transform: translate(-50%, -50%);
 
-    width: min(450px, 92%);
-
-    max-height: 80vh;
+    width: min(450px, calc(100% - 30px));
 
     overflow: hidden;
 
-    border: 1px solid var(--line);
+    background: white;
 
-    border-radius: 7px;
+    border: 1px solid var(--border);
 
-    background: var(--surface);
+    border-radius: 4px;
 
-    box-shadow:
-        0 18px 45px rgba(30, 34, 29, 0.15);
+    box-shadow: 0 14px 40px rgba(30, 31, 28, 0.16);
 }
 
 .modal-header {
-    height: 62px;
+    min-height: 59px;
 
-    padding: 0 20px;
+    padding: 0 18px;
 
     display: flex;
 
@@ -909,40 +912,44 @@ button {
 
     justify-content: space-between;
 
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .modal-header h2 {
     margin: 0;
 
     font-family:
-        "Libre Baskerville",
+        "Source Serif 4",
         Georgia,
         serif;
 
-    font-size: 17px;
+    font-size: 18px;
 
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .close-button {
-    width: 32px;
+    width: 31px;
 
-    height: 32px;
+    height: 31px;
 
-    border: 1px solid var(--line);
+    padding: 0;
 
-    border-radius: 5px;
+    border: 1px solid var(--border);
 
-    background: transparent;
+    border-radius: 3px;
 
-    color: var(--ink);
+    background: white;
 
-    font-size: 21px;
+    color: var(--text);
+
+    font-size: 20px;
+
+    line-height: 1;
 }
 
 .close-button:hover {
-    background: var(--paper-dark);
+    background: var(--hover);
 }
 
 
@@ -957,15 +964,15 @@ button {
 
     margin: 15px;
 
-    padding: 0 11px;
+    padding: 0 10px;
 
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
     background: white;
 
-    color: var(--ink);
+    color: var(--text);
 
     font-size: 13px;
 
@@ -973,7 +980,7 @@ button {
 }
 
 .country-search:focus {
-    border-color: var(--sage);
+    border-color: var(--green);
 }
 
 .country-list {
@@ -981,29 +988,29 @@ button {
 
     overflow-y: auto;
 
-    padding: 0 10px 12px;
+    padding: 0 9px 12px;
 }
 
 .country-option {
     width: 100%;
 
-    height: 44px;
+    height: 43px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 11px;
 
-    padding: 0 10px;
+    padding: 0 9px;
 
     border: 0;
 
-    border-radius: 4px;
+    border-radius: 2px;
 
     background: transparent;
 
-    color: var(--ink);
+    color: var(--text);
 
     text-align: left;
 
@@ -1011,32 +1018,34 @@ button {
 }
 
 .country-option:hover {
-    background: var(--paper-dark);
+    background: var(--hover);
 }
 
 .country-flag {
-    width: 29px;
+    width: 28px;
 
-    font-size: 21px;
+    font-size: 20px;
+
+    text-align: center;
 }
 
 
 /* =========================================================
-   SHARE MODAL
+   SHARE
    ========================================================= */
 
 .share-modal {
-    padding-bottom: 23px;
+    padding-bottom: 20px;
 }
 
 .share-modal p {
-    padding: 0 20px;
+    margin: 17px 18px;
 
     color: var(--muted);
 
     font-size: 13px;
 
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .share-link-container {
@@ -1044,7 +1053,7 @@ button {
 
     gap: 7px;
 
-    padding: 0 20px;
+    padding: 0 18px;
 }
 
 .share-link-container input {
@@ -1052,25 +1061,43 @@ button {
 
     flex: 1;
 
-    height: 42px;
+    height: 40px;
 
     padding: 0 9px;
 
-    border: 1px solid var(--line-dark);
+    border: 1px solid var(--border);
 
-    border-radius: 5px;
+    border-radius: 3px;
 
-    background: white;
+    background: #fafaf7;
 
     color: var(--muted);
 
     font-size: 10px;
+
+    outline: none;
 }
 
-.share-link-container .primary-button {
-    width: auto;
+.copy-button {
+    height: 40px;
 
-    padding: 0 17px;
+    padding: 0 15px;
+
+    border: 1px solid var(--green-dark);
+
+    border-radius: 3px;
+
+    background: var(--green);
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.copy-button:hover {
+    background: var(--green-dark);
 }
 
 
@@ -1081,14 +1108,22 @@ button {
 @media (max-width: 700px) {
 
     .home-container {
-        padding-top: 55px;
+        padding-top: 70px;
     }
 
     .home-container h1 {
         font-size: 31px;
+
+        margin-bottom: 28px;
+    }
+
+    .home-card {
+        padding: 23px;
     }
 
     .topbar {
+        min-height: 62px;
+
         padding: 0 12px;
     }
 
@@ -1097,17 +1132,15 @@ button {
     }
 
     .predictor-bar {
-        padding: 12px;
-
-        align-items: flex-end;
+        padding: 11px 12px;
     }
 
-    .predictor-bar input {
+    .predictor-name input {
         width: 180px;
     }
 
     .draw-wrapper {
-        padding: 25px 15px;
+        padding: 28px 15px 45px;
     }
 
 }

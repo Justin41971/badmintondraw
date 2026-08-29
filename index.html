@@ -1,38 +1,34 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Badminton Draw Predictor</title>
+    <title>Badminton Draw Builder</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =========================
-         HOME PAGE
-    ========================== -->
+    <!-- =====================================================
+         HOME
+    ====================================================== -->
 
     <main id="homePage" class="page">
 
         <div class="home-container">
 
-            <div class="wordmark">
-                BADMINTON DRAWS
-            </div>
-
-            <h1>Make your prediction.</h1>
-
-            <p class="subtitle">
-                Build a knockout draw, pick your winners, and share it with your friends.
-            </p>
+            <h1>Badminton Draw Builder</h1>
 
             <div class="home-card">
 
@@ -45,7 +41,8 @@
                 <input
                     id="tournamentName"
                     type="text"
-                    placeholder="e.g. 2026 BWF World Championships"
+                    placeholder="Tournament name"
+                    autocomplete="off"
                 >
 
                 <label>
@@ -55,24 +52,27 @@
                 <div class="draw-size-options">
 
                     <button
+                        type="button"
                         class="size-button active"
                         data-size="64"
                     >
-                        R64
+                        <strong>R64</strong>
                         <span>64 players</span>
                     </button>
 
                     <button
+                        type="button"
                         class="size-button"
                         data-size="32"
                     >
-                        R32
+                        <strong>R32</strong>
                         <span>32 players</span>
                     </button>
 
                 </div>
 
                 <button
+                    type="button"
                     id="createTournamentButton"
                     class="primary-button"
                 >
@@ -86,6 +86,7 @@
             </div>
 
             <button
+                type="button"
                 id="importButton"
                 class="secondary-button"
             >
@@ -104,9 +105,9 @@
     </main>
 
 
-    <!-- =========================
-         DRAW PAGE
-    ========================== -->
+    <!-- =====================================================
+         DRAW
+    ====================================================== -->
 
     <main id="drawPage" class="page hidden">
 
@@ -115,14 +116,16 @@
             <div class="topbar-left">
 
                 <button
+                    type="button"
                     id="backButton"
-                    class="icon-button"
+                    class="back-button"
                     title="Back"
                 >
                     ←
                 </button>
 
-                <div>
+                <div class="tournament-info">
+
                     <div
                         id="drawTournamentName"
                         class="tournament-title"
@@ -136,6 +139,7 @@
                     >
                         R64
                     </div>
+
                 </div>
 
             </div>
@@ -143,6 +147,7 @@
             <div class="topbar-actions">
 
                 <button
+                    type="button"
                     id="resetButton"
                     class="small-button"
                 >
@@ -150,6 +155,7 @@
                 </button>
 
                 <button
+                    type="button"
                     id="shareTemplateButton"
                     class="small-button"
                 >
@@ -157,6 +163,7 @@
                 </button>
 
                 <button
+                    type="button"
                     id="sharePredictionButton"
                     class="primary-small-button"
                 >
@@ -168,27 +175,28 @@
         </header>
 
 
-        <!-- =========================
+        <!-- =================================================
              PREDICTOR
-        ========================== -->
+        ================================================== -->
 
         <section class="predictor-bar">
 
-            <div>
+            <div class="predictor-name">
 
                 <label for="predictorName">
-                    Predictor Name
+                    Your Name
                 </label>
 
                 <input
                     id="predictorName"
                     type="text"
                     placeholder="Enter your name"
+                    autocomplete="off"
                 >
 
             </div>
 
-            <div class="status">
+            <div class="save-status">
 
                 <span class="status-dot"></span>
 
@@ -201,24 +209,23 @@
         </section>
 
 
-        <!-- =========================
+        <!-- =================================================
              DRAW
-        ========================== -->
+        ================================================== -->
 
         <section class="draw-wrapper">
 
             <div
                 id="drawContainer"
                 class="draw-container"
-            >
-            </div>
+            ></div>
 
         </section>
 
 
-        <!-- =========================
+        <!-- =================================================
              CHAMPION
-        ========================== -->
+        ================================================== -->
 
         <section
             id="championSection"
@@ -232,17 +239,16 @@
             <div
                 id="championDisplay"
                 class="champion-display"
-            >
-            </div>
+            ></div>
 
         </section>
 
     </main>
 
 
-    <!-- =========================
+    <!-- =====================================================
          COUNTRY MODAL
-    ========================== -->
+    ====================================================== -->
 
     <div
         id="countryModal"
@@ -258,6 +264,7 @@
                 <h2>Select Country</h2>
 
                 <button
+                    type="button"
                     id="closeCountryModal"
                     class="close-button"
                 >
@@ -277,17 +284,16 @@
             <div
                 id="countryList"
                 class="country-list"
-            >
-            </div>
+            ></div>
 
         </div>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          SHARE MODAL
-    ========================== -->
+    ====================================================== -->
 
     <div
         id="shareModal"
@@ -305,6 +311,7 @@
                 </h2>
 
                 <button
+                    type="button"
                     id="closeShareModal"
                     class="close-button"
                 >
@@ -321,12 +328,14 @@
 
                 <input
                     id="shareLink"
+                    type="text"
                     readonly
                 >
 
                 <button
+                    type="button"
                     id="copyShareLink"
-                    class="primary-button"
+                    class="copy-button"
                 >
                     Copy
                 </button>
@@ -343,4 +352,4 @@
 
 </body>
 </html>
-```
+
