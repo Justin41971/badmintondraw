@@ -1262,3 +1262,48 @@ button {
     }
 }
 
+/* =========================================================
+   EMPTY FLAG BUTTON
+   ========================================================= */
+
+.flag-button.empty-flag {
+    width: 27px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--surface-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.flag-button.empty-flag:hover {
+    border-color: var(--green);
+    background: var(--green-light);
+}
+
+.blank-flag {
+    color: var(--text-muted);
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.flag-button.has-flag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 27px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+

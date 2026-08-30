@@ -588,10 +588,6 @@ function getPlayerForSlot(
 }
 
 
-/* =========================================================
-   PLAYER CARD
-   ========================================================= */
-
 function createPlayerCard(
     player,
     roundIndex,
@@ -599,150 +595,113 @@ function createPlayerCard(
     position
 ) {
 
-    const card =
-        document.createElement(
-            "div"
-        );
+    const card = document.createElement("div");
+    card.className = "player-card";
 
-    card.className =
-        "player-card";
+    const playerIndex = matchIndex * 2 + position;
+
+    const playerData =
+        roundIndex === 0
+            ? tournament.players[playerIndex]
+            : player;
 
 
     /* =====================================================
-       ROUND 1
+       FIRST ROUND
        ===================================================== */
 
-    if (
-        roundIndex === 0
-    ) {
+    if (roundIndex === 0) {
 
-        /*
-            COUNTRY BUTTON
-        */
+        /* Country / Flag button */
 
-        const flagButton =
-            document.createElement(
-                "button"
-            );
+        const flagButton = document.createElement("button");
 
-        flagButton.type =
-            "button";
+        flagButton.type = "button";
+        flagButton.className = "flag-button";
 
-        flagButton.className =
-            "flag-button";
+        if (playerData?.country) {
 
-        flagButton.title =
-            "Select country";
+            /*
+                Country has been selected.
+                Display the country's flag.
+            */
 
+            flagButton.textContent =
+                playerData.country.flag;
 
-        const flagImage =
-            createFlagImage(
-                player?.country,
-                "player-flag"
-            );
+            flagButton.classList.add("has-flag");
 
+        } else {
 
-        flagButton.appendChild(
-            flagImage
-        );
+            /*
+                No country selected.
+                Display a blank flag with a +.
+            */
 
+            flagButton.innerHTML = `
+                <span class="blank-flag">+</span>
+            `;
+
+            flagButton.classList.add("empty-flag");
+
+        }
+
+        flagButton.title = "Select country";
 
         flagButton.addEventListener(
             "click",
             event => {
 
                 event.preventDefault();
-
                 event.stopPropagation();
 
-
-                openCountrySelector(
-                    matchIndex * 2 +
-                    position
-                );
+                openCountrySelector(playerIndex);
 
             }
         );
 
 
-        /*
-            PLAYER NAME INPUT
-        */
+        /* Player name */
 
         const input =
-            document.createElement(
-                "input"
-            );
+            document.createElement("input");
 
-        input.type =
-            "text";
-
-        input.className =
-            "player-name-input";
+        input.type = "text";
+        input.className = "player-name-input";
 
         input.placeholder =
-            `Player ${
-                matchIndex * 2 +
-                position +
-                1
-            }`;
+            `Player ${playerIndex + 1}`;
 
         input.value =
-            player?.name || "";
+            playerData?.name || "";
 
 
         /*
-            VERY IMPORTANT:
-
-            Clicking or typing inside the
-            input must NOT select the player
-            as the winner.
+            IMPORTANT:
+            Stop the player-card click event from
+            interfering with typing.
         */
 
         input.addEventListener(
             "click",
             event => {
-
                 event.stopPropagation();
-
             }
         );
-
 
         input.addEventListener(
             "mousedown",
             event => {
-
                 event.stopPropagation();
-
             }
         );
-
-
-        input.addEventListener(
-            "keydown",
-            event => {
-
-                event.stopPropagation();
-
-            }
-        );
-
 
         input.addEventListener(
             "input",
             () => {
 
-                const playerIndex =
-                    matchIndex * 2 +
-                    position;
-
-
-                tournament.players[
-                    playerIndex
-                ].name =
+                tournament.players[playerIndex].name =
                     input.value;
-
 
                 saveTournament();
 
@@ -750,13 +709,8 @@ function createPlayerCard(
         );
 
 
-        card.appendChild(
-            flagButton
-        );
-
-        card.appendChild(
-            input
-        );
+        card.appendChild(flagButton);
+        card.appendChild(input);
 
     }
 
@@ -767,64 +721,46 @@ function createPlayerCard(
 
     else {
 
-        if (!player) {
+        if (!playerData) {
 
-            card.classList.add(
-                "empty-player"
-            );
+            card.classList.add("empty-player");
 
-
-            const text =
-                document.createElement(
-                    "span"
-                );
-
-            text.textContent =
-                "Winner of previous match";
-
-
-            card.appendChild(
-                text
-            );
+            card.innerHTML = `
+                <span>Winner of previous match</span>
+            `;
 
         }
 
         else {
 
-            /*
-                AUTOMATIC FLAG
+            const flag =
+                document.createElement("span");
 
-                The country is carried from
-                the previous round.
+            flag.className =
+                "player-flag";
+
+            /*
+                Carry the player's country through
+                every round.
             */
 
-            const flag =
-                createFlagImage(
-                    player.country,
-                    "player-flag"
-                );
+            flag.textContent =
+                playerData.country?.flag || "";
 
 
             const name =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
             name.className =
                 "player-name";
 
             name.textContent =
-                player.name ||
+                playerData.name ||
                 "Unnamed Player";
 
 
-            card.appendChild(
-                flag
-            );
-
-            card.appendChild(
-                name
-            );
+            card.appendChild(flag);
+            card.appendChild(name);
 
         }
 
@@ -835,10 +771,7 @@ function createPlayerCard(
        CLICK TO SELECT WINNER
        ===================================================== */
 
-    if (
-        player &&
-        player.name
-    ) {
+    if (playerData && playerData.name) {
 
         card.addEventListener(
             "click",
@@ -847,7 +780,8 @@ function createPlayerCard(
                 selectWinner(
                     roundIndex,
                     matchIndex,
-                    player
+                    playerData,
+                    card
                 );
 
             }
@@ -857,35 +791,28 @@ function createPlayerCard(
 
 
     /* =====================================================
-       WINNER HIGHLIGHT
+       HIGHLIGHT WINNER
        ===================================================== */
 
     const winnerKey =
         `${roundIndex}-${matchIndex}`;
 
-
     const winner =
-        tournament.winners[
-            winnerKey
-        ];
+        tournament.winners[winnerKey];
 
 
     if (
         winner &&
-        player &&
-        winner.name ===
-            player.name
+        playerData &&
+        winner.name === playerData.name
     ) {
 
-        card.classList.add(
-            "winner"
-        );
+        card.classList.add("winner");
 
     }
 
 
     return card;
-
 }
 
 
