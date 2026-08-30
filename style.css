@@ -726,6 +726,7 @@ button {
 }
 
 
+
 /* =========================================================
    FLAGS
    ========================================================= */
@@ -734,30 +735,71 @@ button {
     width: 27px;
     height: 27px;
     padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border: 0;
     background: transparent;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    font-size: 18px;
-    line-height: 1;
+
     flex-shrink: 0;
+}
+
+.flag-button:hover {
+    background: transparent;
 }
 
 .player-flag {
-    width: 27px;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    font-size: 18px;
-    line-height: 1;
+    width: 24px;
+    height: 16px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 2px;
+
     flex-shrink: 0;
-    text-align: center;
 }
+
+
+/* =========================================================
+   COUNTRY SELECTOR FLAGS
+   ========================================================= */
 
 .country-flag {
     width: 28px;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    font-size: 20px;
-    line-height: 1;
-    text-align: center;
+    height: 19px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 2px;
+
+    flex-shrink: 0;
 }
+
+
+/* =========================================================
+   CHAMPION FLAG
+   ========================================================= */
+
+.champion-flag {
+    width: 30px;
+    height: 20px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 2px;
+
+    flex-shrink: 0;
+}
+
+
 
 /* =========================================================
    PLAYER NAMES
