@@ -1308,4 +1308,35 @@ button {
     font-size: 18px;
 }
 
+/* =========================================================
+   FLAG IMAGES
+   ========================================================= */
+
+.flag-image {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.country-flag-image {
+    width: 28px;
+    height: 19px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.champion-flag-image {
+    width: 30px;
+    height: 20px;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
 
